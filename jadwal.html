@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Keberangkatan - Biskita Trans Wibawa Mukti</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style type="text/tailwindcss">
+  :root {
+    --primary: #0284c7; 
+    --primary-hover: #0369a1;
+    --font-sans: 'Lexend Deca', sans-serif;
+  }
+  @theme inline {
+    --color-primary: var(--primary);
+    --font-sans: var(--font-sans);
+  }
+  body { 
+    font-family: var(--font-sans);
+  }
+
+  .biskita-bg {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(241, 245, 249, 0.95)), url('biskita.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .anim-fade { animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .anim-delay-1 { opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between biskita-bg text-slate-800 selection:bg-amber-500 selection:text-white overflow-x-hidden">
+
+  <!-- Header dengan Tombol Kembali -->
+  <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between anim-fade">
+    <a href="index.html" class="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-md border border-white hover:bg-white transition-colors rounded-xl shadow-sm text-sm font-bold text-slate-700">
+      <i data-lucide="arrow-left" class="size-4"></i>
+      Kembali
+    </a>
+
+    <div class="flex items-center gap-2 sm:gap-3 bg-white/60 backdrop-blur-md border border-white px-4 py-2 rounded-xl shadow-sm">
+      <img src="logosmkn2cikbar.png" alt="Logo SMKN 2" class="h-6 sm:h-8 w-auto object-contain">
+      <div class="w-px h-6 bg-slate-300"></div>
+      <img src="Colorful_Biskita_Logo.png" alt="Logo Biskita" class="h-6 sm:h-8 w-auto object-contain">
+    </div>
+  </header>
+
+  <main class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-6 flex-1 anim-delay-1">
+    
+    <div class="bg-white/80 backdrop-blur-xl border border-white rounded-[28px] p-6 sm:p-8 shadow-xl flex flex-col h-full">
+      
+      <!-- Judul & Info -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 mb-6">
+        <div>
+          <div class="flex items-center gap-2 text-amber-600 mb-1">
+            <i data-lucide="calendar-clock" class="size-5"></i>
+            <span class="text-xs font-bold uppercase tracking-wider">Info Waktu</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Jadwal Operasional</h1>
+        </div>
+        
+        <!-- Pilihan Rute -->
+        <div class="w-full sm:w-64 relative">
+          <select id="pilih-jadwal" class="w-full appearance-none bg-amber-50/50 border border-amber-200 text-amber-900 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold cursor-pointer text-sm shadow-sm transition-all">
+            <option value="berangkat">LRT Jatimulya ➔ St. Cikarang</option>
+            <option value="kembali">St. Cikarang ➔ LRT Jatimulya</option>
+          </select>
+          <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 text-amber-600 size-5 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <!-- Highlight Info Cepat (Grid) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col items-center text-center">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-2">
+            <i data-lucide="clock-4" class="size-5"></i>
+          </div>
+          <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-0.5">Jam Operasional</p>
+          <p class="font-bold text-slate-800">05:00 - 21:00 WIB</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col items-center text-center">
+          <div class="w-10 h-10 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-2">
+            <i data-lucide="timer" class="size-5"></i>
+          </div>
+          <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-0.5">Waktu Tunggu (Headway)</p>
+          <p class="font-bold text-slate-800">10 - 15 Menit</p>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col items-center text-center">
+          <div class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-2">
+            <i data-lucide="ticket" class="size-5"></i>
+          </div>
+          <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-0.5">Tarif Penumpang</p>
+          <p class="font-bold text-slate-800">Gratis (Tap E-Money)</p>
+        </div>
+      </div>
+
+      <!-- Tabel Estimasi Kedatangan Halte Utama -->
+      <div>
+        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+          <i data-lucide="map-pin" class="size-4 text-slate-400"></i>
+          Estimasi Tiba di Halte Utama
+        </h3>
+        
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-slate-500 uppercase bg-slate-50">
+              <tr>
+                <th scope="col" class="px-4 py-3 font-bold">Nama Halte</th>
+                <th scope="col" class="px-4 py-3 font-bold whitespace-nowrap text-center">Bus Pertama</th>
+                <th scope="col" class="px-4 py-3 font-bold whitespace-nowrap text-center">Bus Terakhir</th>
+              </tr>
+            </thead>
+            <tbody id="tabel-jadwal" class="divide-y divide-slate-100 bg-white/50 transition-opacity duration-300">
+              <!-- Baris tabel akan dirender lewat JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <p class="text-[10px] text-slate-400 mt-3 flex items-center gap-1.5">
+          <i data-lucide="info" class="size-3"></i>
+          Waktu di atas adalah estimasi dan dapat berubah menyesuaikan kondisi lalu lintas di lapangan.
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 border-t border-slate-200/50 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-600 gap-3 anim-fade">
+    <p class="text-center sm:text-left">&copy; 2026 Divisi ICT SMKN 2 Cikarang Barat. All rights reserved.</p>
+    <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-medium">
+      <a href="lacak.html" class="hover:text-sky-600 transition-colors">Lacak Live</a>
+      <a href="rute.html" class="hover:text-sky-600 transition-colors">Rute & Halte</a>
+      <a href="jadwal.html" class="text-amber-600">Jadwal Keberangkatan</a>
+    </div>
+  </footer>
+
+<script>
+  lucide.createIcons();
+
+  // Data Jadwal Berangkat (Jatimulya -> Cikarang)
+  const jadwalBerangkat = [
+    { halte: "Stasiun LRT Jatimulya", pertama: "05:00 WIB", terakhir: "21:00 WIB", highlight: false },
+    { halte: "BTC 2", pertama: "05:10 WIB", terakhir: "21:10 WIB", highlight: false },
+    { halte: "Bulak Kapal 1", pertama: "05:25 WIB", terakhir: "21:25 WIB", highlight: false },
+    { halte: "Gedung Juang", pertama: "05:45 WIB", terakhir: "21:45 WIB", highlight: false },
+    { halte: "RSUD Cibitung 1", pertama: "06:10 WIB", terakhir: "22:10 WIB", highlight: false },
+    { halte: "SMK Cikarang Barat 1 (SMKN 2)", pertama: "06:25 WIB", terakhir: "22:25 WIB", highlight: true },
+    { halte: "Terminal Cikarang 1", pertama: "06:35 WIB", terakhir: "22:35 WIB", highlight: false },
+    { halte: "Stasiun KRL Cikarang 1", pertama: "06:45 WIB", terakhir: "22:45 WIB", highlight: false }
+  ];
+
+  // Data Jadwal Kembali (Cikarang -> Jatimulya)
+  const jadwalKembali = [
+    { halte: "Stasiun KRL Cikarang 1", pertama: "05:00 WIB", terakhir: "21:00 WIB", highlight: false },
+    { halte: "Terminal Cikarang 1", pertama: "05:10 WIB", terakhir: "21:10 WIB", highlight: false },
+    { halte: "SMK Cikarang Barat 1 (SMKN 2)", pertama: "05:20 WIB", terakhir: "21:20 WIB", highlight: true },
+    { halte: "RSUD Cibitung 1", pertama: "05:35 WIB", terakhir: "21:35 WIB", highlight: false },
+    { halte: "Gedung Juang", pertama: "06:00 WIB", terakhir: "22:00 WIB", highlight: false },
+    { halte: "Bulak Kapal 1", pertama: "06:20 WIB", terakhir: "22:20 WIB", highlight: false },
+    { halte: "BTC 2", pertama: "06:35 WIB", terakhir: "22:35 WIB", highlight: false },
+    { halte: "Stasiun LRT Jatimulya", pertama: "06:45 WIB", terakhir: "22:45 WIB", highlight: false }
+  ];
+
+  function renderJadwal(data) {
+    const tbody = document.getElementById('tabel-jadwal');
+    tbody.style.opacity = 0; // Fade out
+
+    setTimeout(() => {
+      let htmlString = '';
+      
+      data.forEach(item => {
+        if (item.highlight) {
+          htmlString += `
+          <tr class="bg-sky-50/80 border-l-4 border-sky-500">
+            <td class="px-4 py-3 font-bold text-sky-800 flex items-center gap-2">
+              <i data-lucide="graduation-cap" class="size-4 text-sky-600"></i>
+              ${item.halte}
+            </td>
+            <td class="px-4 py-3 text-center font-mono font-bold text-sky-700">${item.pertama}</td>
+            <td class="px-4 py-3 text-center font-mono font-bold text-sky-700">${item.terakhir}</td>
+          </tr>`;
+        } else {
+          htmlString += `
+          <tr class="hover:bg-slate-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-slate-700">${item.halte}</td>
+            <td class="px-4 py-3 text-center font-mono text-slate-600">${item.pertama}</td>
+            <td class="px-4 py-3 text-center font-mono text-slate-600">${item.terakhir}</td>
+          </tr>`;
+        }
+      });
+
+      tbody.innerHTML = htmlString;
+      lucide.createIcons(); // Render ulang icon lucide
+      tbody.style.opacity = 1; // Fade in
+    }, 200);
+  }
+
+  // Tampilkan jadwal rute berangkat secara default
+  renderJadwal(jadwalBerangkat);
+
+  // Ganti jadwal ketika dropdown dipilih
+  document.getElementById('pilih-jadwal').addEventListener('change', function(e) {
+    if (e.target.value === 'kembali') {
+      renderJadwal(jadwalKembali);
+    } else {
+      renderJadwal(jadwalBerangkat);
+    }
+  });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rute & Halte - Biskita Trans Wibawa Mukti</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style type="text/tailwindcss">
+  :root {
+    --primary: #0284c7; 
+    --primary-hover: #0369a1;
+    --font-sans: 'Lexend Deca', sans-serif;
+  }
+  @theme inline {
+    --color-primary: var(--primary);
+    --font-sans: var(--font-sans);
+  }
+  body { 
+    font-family: var(--font-sans);
+  }
+
+  .biskita-bg {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(241, 245, 249, 0.95)), url('biskita.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .anim-fade { animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .anim-delay-1 { opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+  
+  /* Custom Scrollbar biar elegan */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+</style>
+</head>
+<body class="min-h-screen flex flex-col justify-between biskita-bg text-slate-800 selection:bg-sky-500 selection:text-white overflow-x-hidden">
+
+  <!-- Header dengan Tombol Kembali -->
+  <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between anim-fade">
+    <a href="index.html" class="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-md border border-white hover:bg-white transition-colors rounded-xl shadow-sm text-sm font-bold text-slate-700">
+      <i data-lucide="arrow-left" class="size-4"></i>
+      Kembali
+    </a>
+
+    <div class="flex items-center gap-2 sm:gap-3 bg-white/60 backdrop-blur-md border border-white px-4 py-2 rounded-xl shadow-sm">
+      <img src="logosmkn2cikbar.png" alt="Logo SMKN 2" class="h-6 sm:h-8 w-auto object-contain">
+      <div class="w-px h-6 bg-slate-300"></div>
+      <img src="Colorful_Biskita_Logo.png" alt="Logo Biskita" class="h-6 sm:h-8 w-auto object-contain">
+    </div>
+  </header>
+
+  <main class="w-full max-w-3xl mx-auto px-4 sm:px-6 py-4 flex flex-col gap-6 flex-1 anim-delay-1">
+    
+    <div class="bg-white/80 backdrop-blur-xl border border-white rounded-[28px] p-6 sm:p-8 shadow-xl flex flex-col h-full max-h-[80vh]">
+      
+      <!-- Judul & Info -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/60 pb-6 mb-6 shrink-0">
+        <div>
+          <div class="flex items-center gap-2 text-emerald-600 mb-1">
+            <i data-lucide="map" class="size-5"></i>
+            <span class="text-xs font-bold uppercase tracking-wider">Info Trayek</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">Daftar Rute & Halte</h1>
+        </div>
+        
+        <!-- Pilihan Rute -->
+        <div class="w-full sm:w-64 relative">
+          <!-- Tambahin ID 'pilih-rute' buat dipanggil JS -->
+          <select id="pilih-rute" class="w-full appearance-none bg-emerald-50/50 border border-emerald-200 text-emerald-900 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-semibold cursor-pointer text-sm shadow-sm transition-all">
+            <option value="berangkat">LRT Jatimulya ➔ St. Cikarang</option>
+            <option value="kembali">St. Cikarang ➔ LRT Jatimulya</option>
+          </select>
+          <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-600 size-5 pointer-events-none"></i>
+        </div>
+      </div>
+
+      <!-- Area Scrollable Timeline Halte -->
+      <div class="overflow-y-auto pr-4 sm:pr-2 flex-1 pb-4">
+        <!-- Tambahin ID 'daftar-halte' buat dipanggil JS -->
+        <div id="daftar-halte" class="relative pl-6 sm:pl-8 border-l-2 border-slate-200 space-y-6 py-2 ml-2 sm:ml-4 transition-opacity duration-300">
+          
+          <!-- Daftar halte default (Jatimulya ke Cikarang) akan dimasukkan lewat JS biar rapi -->
+          
+        </div>
+      </div>
+      
+    </div>
+
+  </main>
+
+  <footer class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 border-t border-slate-200/50 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-600 gap-3 anim-fade">
+    <p class="text-center sm:text-left">&copy; 2026 Divisi ICT SMKN 2 Cikarang Barat. All rights reserved.</p>
+    <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-medium">
+      <a href="lacak.html" class="hover:text-sky-600 transition-colors">Lacak Live</a>
+      <a href="rute.html" class="text-sky-600">Rute & Halte</a>
+      <a href="jadwal.html" class="hover:text-sky-600 transition-colors">Jadwal Keberangkatan</a>
+    </div>
+  </footer>
+
+<script>
+  lucide.createIcons();
+
+  // Data List Halte
+  const halteJatimulyaToCikarang = [
+    { nama: "Stasiun LRT Jatimulya", tipe: "awal" },
+    { nama: "BTC 2", tipe: "biasa" },
+    { nama: "Rusunawa Depsos 1", tipe: "biasa" },
+    { nama: "Bulak Kapal 1", tipe: "biasa" },
+    { nama: "Holand Bakery Juanda", tipe: "biasa" },
+    { nama: "SPBU Setiamekar 1", tipe: "biasa" },
+    { nama: "Suzuki 1", tipe: "biasa" },
+    { nama: "Indoprolen 1", tipe: "biasa" },
+    { nama: "SPBU Diponegoro 1", tipe: "biasa" },
+    { nama: "Naga Swalayan 1", tipe: "biasa" },
+    { nama: "Gedung Juang", tipe: "biasa" },
+    { nama: "Yapink Tambun 1", tipe: "biasa" },
+    { nama: "Kecamatan Tambun Selatan", tipe: "biasa" },
+    { nama: "Ruko Tambun City", tipe: "biasa" },
+    { nama: "Jl. Kampung Utan 1", tipe: "biasa" },
+    { nama: "PMI 1", tipe: "biasa" },
+    { nama: "RSUD Cibitung 1", tipe: "biasa" },
+    { nama: "SDN Telaga Asih 01", tipe: "biasa" },
+    { nama: "RS Adam Talib 1", tipe: "biasa" },
+    { nama: "Exit Tol Telaga Asih", tipe: "biasa" },
+    { nama: "Kantor Kecamatan Cikarang", tipe: "biasa" },
+    { nama: "Rawa Palangan 1", tipe: "biasa" },
+    { nama: "Puskesmas Tambun Murni", tipe: "biasa" },
+    { nama: "Telaga Harapan", tipe: "biasa" },
+    { nama: "Hitachi 1", tipe: "biasa" },
+    { nama: "PLN", tipe: "biasa" },
+    { nama: "SMK Cikarang Barat 1", tipe: "spesial", info: "Halte SMKN 2 Cikarang Barat" },
+    { nama: "Terminal Cikarang 1", tipe: "biasa" },
+    { nama: "Masjid Al-Ma'mur 1", tipe: "biasa" },
+    { nama: "Stasiun KRL Cikarang 1", tipe: "akhir" }
+  ];
+
+  // Fungsi untuk merender HTML halte
+  function renderHalte(data) {
+    const container = document.getElementById('daftar-halte');
+    container.style.opacity = 0; // Efek fade out
+
+    setTimeout(() => {
+      let htmlString = '';
+      
+      data.forEach((halte, index) => {
+        // Jika titik awal
+        if (index === 0) {
+          htmlString += `
+          <div class="relative">
+            <div class="absolute -left-[31px] sm:-left-[39px] w-6 h-6 rounded-full bg-emerald-500 border-4 border-white shadow-md flex items-center justify-center">
+              <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base sm:text-lg">${halte.nama}</h3>
+            <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wide mt-0.5">Titik Awal</p>
+          </div>`;
+        } 
+        // Jika titik akhir
+        else if (index === data.length - 1) {
+          htmlString += `
+          <div class="relative pt-2">
+            <div class="absolute -left-[31px] sm:-left-[39px] w-6 h-6 rounded-full bg-red-500 border-4 border-white shadow-md flex items-center justify-center">
+              <div class="w-1.5 h-1.5 bg-white rounded-full"></div>
+            </div>
+            <h3 class="font-bold text-slate-800 text-base sm:text-lg">${halte.nama}</h3>
+            <p class="text-xs font-semibold text-red-500 uppercase tracking-wide mt-0.5">Titik Akhir</p>
+          </div>`;
+        }
+        // Jika halte spesial SMK
+        else if (halte.tipe === "spesial") {
+          htmlString += `
+          <div class="relative bg-sky-50 rounded-xl p-3 border border-sky-100 -ml-3 mt-4 mb-4 shadow-sm">
+            <div class="absolute -left-[21px] sm:-left-[29px] top-4 w-5 h-5 rounded-full bg-sky-500 border-4 border-white shadow animate-bounce"></div>
+            <h3 class="font-bold text-sky-800 text-base flex items-center gap-2">
+              <i data-lucide="graduation-cap" class="size-4 text-sky-600"></i>
+              ${halte.nama}
+            </h3>
+            <p class="text-[11px] text-sky-600/80 font-medium mt-1">${halte.info}</p>
+          </div>`;
+        }
+        // Halte biasa
+        else {
+          htmlString += `
+          <div class="relative"><div class="absolute -left-[29px] sm:-left-[37px] w-4 h-4 rounded-full bg-slate-300 border-2 border-white shadow-sm"></div><h3 class="font-semibold text-slate-700 text-sm">${halte.nama}</h3></div>`;
+        }
+      });
+
+      container.innerHTML = htmlString;
+      lucide.createIcons(); 
+      container.style.opacity = 1;
+    }, 200);
+  }
+
+  // Tampilkan rute default saat pertama dibuka
+  renderHalte(halteJatimulyaToCikarang);
+
+  // Deteksi perubahan di Dropdown
+  document.getElementById('pilih-rute').addEventListener('change', function(e) {
+    if (e.target.value === 'kembali') {
+      const reversedHalte = [...halteJatimulyaToCikarang].reverse();
+      renderHalte(reversedHalte);
+    } else {
+      renderHalte(halteJatimulyaToCikarang);
+    }
+  });
+
+</script>
+</body>
+</html>

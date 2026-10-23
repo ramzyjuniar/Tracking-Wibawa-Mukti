@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lacak Live - Biskita Trans Wibawa Mukti</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- Library Peta Leaflet.js -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style type="text/tailwindcss">
+  :root {
+    --primary: #0284c7; 
+    --font-sans: 'Lexend Deca', sans-serif;
+  }
+  @theme inline {
+    --font-sans: var(--font-sans);
+  }
+  body { 
+    font-family: var(--font-sans);
+  }
+
+  .biskita-bg {
+    background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(241, 245, 249, 0.95)), url('biskita.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  /* Animasi Masuk */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-fade { animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .anim-delay-1 { opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
+  .anim-delay-2 { opacity: 0; animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
+
+  /* Leaflet Customizations - Pindah Posisi Attribution */
+  .leaflet-control-attribution {
+    background: rgba(255,255,255,0.8) !important;
+    backdrop-filter: blur(4px);
+    border-radius: 8px 0 0 0;
+    font-size: 10px !important;
+  }
+</style>
+</head>
+<body class="min-h-screen flex flex-col biskita-bg text-slate-800 selection:bg-sky-500 selection:text-white overflow-x-hidden">
+
+  <!-- Header -->
+  <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between anim-fade relative z-50">
+    <a href="index.html" class="flex items-center gap-2 px-4 py-2 bg-white/60 backdrop-blur-md border border-white hover:bg-white transition-colors rounded-xl shadow-sm text-sm font-bold text-slate-700">
+      <i data-lucide="arrow-left" class="size-4"></i>
+      Kembali
+    </a>
+
+    <div class="flex items-center gap-2 sm:gap-3 bg-white/60 backdrop-blur-md border border-white px-4 py-2 rounded-xl shadow-sm">
+      <img src="logosmkn2cikbar.png" alt="Logo SMKN 2" class="h-6 sm:h-8 w-auto object-contain">
+      <div class="w-px h-6 bg-slate-300"></div>
+      <img src="Colorful_Biskita_Logo.png" alt="Logo Biskita" class="h-6 sm:h-8 w-auto object-contain">
+    </div>
+  </header>
+
+  <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col lg:flex-row gap-6 flex-1 anim-delay-1 relative z-10">
+    
+    <!-- Panel Kiri: Informasi Bus & Status -->
+    <div class="w-full lg:w-1/3 flex flex-col gap-4">
+      <div class="bg-white/70 backdrop-blur-xl border border-white rounded-[24px] p-6 shadow-lg">
+        
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h1 class="text-2xl font-black text-slate-900">Live Tracking</h1>
+            <p class="text-sm text-slate-500 mt-1">Pantau Biskita secara Real-Time</p>
+          </div>
+          <div class="flex items-center gap-1.5 px-3 py-1 bg-emerald-100 border border-emerald-200 rounded-full shadow-inner">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="text-[10px] font-bold text-emerald-700 uppercase tracking-wide">Online</span>
+          </div>
+        </div>
+
+        <!-- Pilih Rute -->
+        <div class="mb-6">
+          <label class="block text-xs font-bold text-slate-500 uppercase tracking-wide mb-2">Koridor / Tujuan</label>
+          <div class="relative">
+            <select class="w-full appearance-none bg-slate-50 border border-slate-200 text-slate-700 rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium cursor-pointer text-sm">
+              <option>Stasiun LRT Jatimulya ➔ St. Cikarang</option>
+              <option selected>St. KRL Cikarang ➔ Jatimulya</option>
+            </select>
+            <i data-lucide="chevron-down" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 size-5 pointer-events-none"></i>
+          </div>
+        </div>
+
+        <!-- Kartu Detail Bus -->
+        <div class="bg-sky-50/50 border border-sky-100 rounded-2xl p-4 shadow-inner space-y-4">
+          
+          <div class="w-full h-36 sm:h-40 rounded-xl overflow-hidden relative flex justify-center items-center bg-gradient-to-tr from-sky-200/30 to-white/30 border border-sky-200/50 shadow-sm p-4 group">
+            <img src="bis-removebg-preview.png" alt="Biskita Mini" class="w-full h-full object-contain drop-shadow-xl group-hover:scale-105 transition-transform duration-500">
+          </div>
+
+          <div class="flex items-center gap-3 pt-2">
+            <div class="w-10 h-10 rounded-full bg-sky-100 text-sky-600 flex items-center justify-center shadow-sm shrink-0">
+              <i data-lucide="bus" class="size-5"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 text-lg leading-tight">Biskita BK 1-01</h3>
+              <p class="text-xs text-slate-500 font-mono mt-0.5">Plat: B 7123 FGB</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Kecepatan</p>
+              <p class="text-slate-700 font-bold flex items-center gap-1.5">
+                <i data-lucide="gauge" class="size-4 text-sky-500"></i>
+                <span id="speed-text">0</span> <span class="text-xs font-normal">km/jam</span>
+              </p>
+            </div>
+            <div>
+              <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Menuju Halte Akhir</p>
+              <p class="text-slate-700 font-bold flex items-center gap-1.5 text-xs">
+                <i data-lucide="clock" class="size-4 text-amber-500 shrink-0"></i>
+                LRT Jatimulya
+              </p>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-xl p-3 border border-slate-100 mt-2">
+            <p class="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-1">Status Posisi</p>
+            <p class="text-sm font-semibold text-slate-700 flex items-start gap-2">
+              <i data-lucide="map-pin" class="size-4 text-emerald-500 mt-0.5 shrink-0"></i>
+              Dalam perjalanan melintasi Jalur Pantura
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Panel Kanan: Map Peta Leaflet -->
+    <div class="w-full lg:w-2/3 h-[500px] lg:h-auto min-h-[400px] bg-white/70 backdrop-blur-xl border border-white rounded-[24px] p-2 shadow-lg relative overflow-hidden anim-delay-2 flex flex-col">
+      
+      <!-- Tempat Peta Ditampilkan -->
+      <div id="map" class="w-full h-full rounded-[16px] z-0 bg-slate-100"></div>
+      
+      <!-- Tombol Fokus -->
+      <div class="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-10">
+        <button id="btn-focus" class="bg-white text-slate-700 p-3 rounded-full shadow-lg border border-slate-100 hover:bg-sky-50 hover:text-sky-600 transition-colors" title="Fokuskan ke Posisi Bus">
+          <i data-lucide="crosshair" class="size-5"></i>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 text-center text-xs text-slate-500 anim-delay-2 relative z-50">
+    <p>&copy; 2026 Divisi ICT SMKN 2 Cikarang Barat. All rights reserved.</p>
+  </footer>
+
+<script>
+  // Mengaktifkan Icon Lucide
+  lucide.createIcons();
+
+  // 1. Inisialisasi Peta
+  var map = L.map('map', {
+      zoomControl: false 
+  }).setView([-6.26355, 107.13110], 13); // Zoom out dikit biar rutenya kelihatan luas
+
+  // 2. Pasang Skin Peta Esri ArcGIS
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 19,
+      attribution: 'Tiles &copy; <a href="https://www.esri.com/">Esri</a>'
+  }).addTo(map);
+
+  // 3. Bikin Icon Custom (Gambar Bus Disesuaikan)
+  var customBusMarker = L.divIcon({
+      className: 'bg-transparent border-none', 
+      html: `
+        <div class="flex flex-col items-center pointer-events-none mt-[-5px]">
+          <div class="bg-sky-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm whitespace-nowrap mb-0.5">
+            BK 1-01
+          </div>
+          <div class="relative flex items-center justify-center w-8 h-8">
+            <span class="absolute w-4 h-4 rounded-full bg-sky-400 animate-ping opacity-75"></span>
+            <img src="bis-removebg-preview.png" alt="Bus" style="width: 35px; height: auto;" class="relative z-10 drop-shadow-md">
+          </div>
+        </div>
+      `,
+      iconSize: [40, 50],
+      iconAnchor: [20, 25] 
+  });
+
+  // =========================================================================
+  // 4. TITIK KOORDINAT DIPERBANYAK (Biar nurut sama jalan Pantura)
+  // =========================================================================
+  const route = [
+      [-6.26154, 107.15266], // Stasiun Cikarang
+      [-6.26240, 107.15270], // Pertigaan Yos Sudarso
+      [-6.26210, 107.14725], // Jl. RE Martadinata (Pasar Cikarang)
+      [-6.26055, 107.14165], // Perempatan SGC
+      [-6.26160, 107.13840], // Jl. Gatot Subroto
+      [-6.26245, 107.13500], // Depan Terminal Cikarang
+      [-6.26355, 107.13110], // Jl. Fatahillah
+      [-6.26540, 107.12150], // Pertigaan Telaga Asih
+      [-6.26760, 107.10640], // Perempatan Cibitung (Kawasan Gobel)
+      [-6.26615, 107.09450], // Jl. Teuku Umar
+      [-6.26380, 107.08150], // Pasar Tambun
+      [-6.26080, 107.06320], // Stasiun Tambun / Plaza Metropolian
+      [-6.25890, 107.05050], // Jl. Diponegoro (Setia Mekar)
+      [-6.25755, 107.03960], // Bulak Kapal (Pertigaan)
+      [-6.25850, 107.02950], // Depan BTC
+      [-6.26000, 107.01850], // Perempatan Tol Timur (Belok Kiri ke Joyo Martono)
+      [-6.26450, 107.01780], // Jl. Joyo Martono (Depan RS Mitra Keluarga)
+      [-6.27380, 107.01630]  // Stasiun LRT Jatimulya
+  ];
+
+  // 5. GAMBAR GARIS RUTE (Biar usernya tau rel/jalur aslinya)
+  var jalurBus = L.polyline(route, {
+      color: '#0284c7', // Biru Biskita
+      weight: 5,
+      opacity: 0.6,
+      lineJoin: 'round'
+  }).addTo(map);
+
+  // Masukkan Marker Bus ke Peta di titik awal
+  var markerBis = L.marker(route[0], {icon: customBusMarker}).addTo(map);
+
+  // =========================================================================
+  // 6. SIMULASI BUS BERJALAN SESUAI RUTE 
+  // =========================================================================
+  
+  let currentRouteIndex = 0;
+  let progress = 0; 
+  let currentLat = route[0][0];
+  let currentLng = route[0][1];
+  
+  // Kecepatan dinaikin dikit karena titiknya makin banyak
+  const animationSpeed = 0.0015; 
+
+  function animateBus() {
+      // Loop rute jika sudah sampai ujung
+      if (currentRouteIndex >= route.length - 1) {
+          currentRouteIndex = 0; 
+      }
+
+      const startPoint = route[currentRouteIndex];
+      const endPoint = route[currentRouteIndex + 1];
+
+      progress += animationSpeed;
+
+      if (progress >= 1) {
+          progress = 0; 
+          currentRouteIndex++; 
+      } else {
+          // Hitung posisi bus saat ini di antara 2 titik
+          currentLat = startPoint[0] + (endPoint[0] - startPoint[0]) * progress;
+          currentLng = startPoint[1] + (endPoint[1] - startPoint[1]) * progress;
+
+          // Pindahkan Icon marker bus
+          markerBis.setLatLng([currentLat, currentLng]);
+          
+          // Update kecepatan secara acak biar realistis (30-55 km/h)
+          if (Math.random() > 0.95) {
+              document.getElementById('speed-text').innerText = Math.floor(30 + Math.random() * 25); 
+          }
+      }
+
+      requestAnimationFrame(animateBus);
+  }
+
+  animateBus();
+
+  // 7. Fungsi Tombol Crosshair (Fokus kamera ke bus)
+  document.getElementById('btn-focus').addEventListener('click', function() {
+      map.flyTo([currentLat, currentLng], 16, { animate: true, duration: 1.5 });
+  });
+
+</script>
+</body>
+</html>

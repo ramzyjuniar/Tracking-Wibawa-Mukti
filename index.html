@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMKN 2 Cikarang Barat - Trans Wibawa Mukti</title>
 <link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <style type="text/tailwindcss">
   :root {
@@ -21,7 +21,6 @@
     font-family: var(--font-sans);
   }
 
-  /* Latar Belakang Biskita dengan overlay putih transparant */
   .biskita-bg {
     background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(241, 245, 249, 0.95)), url('biskita.jpg');
     background-size: cover;
@@ -29,24 +28,81 @@
     background-attachment: fixed;
   }
 
-  /* Animasi Masuk Responsive */
   @keyframes fadeSlideUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
   .anim-nav { animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
   .anim-hero-text { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
   .anim-hero-card { opacity: 0; animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
+  .anim-modal { animation: popIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+  /* Custom Scrollbar untuk Modal biar rapi kalau di-scroll di laptop kecil */
+  .custom-scroll::-webkit-scrollbar { width: 6px; }
+  .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+  .custom-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
 </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between biskita-bg text-slate-800 selection:bg-sky-500 selection:text-white overflow-x-hidden">
+<body class="min-h-screen flex flex-col justify-between biskita-bg text-slate-800 selection:bg-sky-500 selection:text-white overflow-x-hidden relative">
 
-  <!-- Header dengan Logo di Tengah -->
-  <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col items-center justify-center anim-nav">
+  <!-- ================= MODAL PENGUMUMAN (VERSI COMPACT) ================= -->
+  <div id="pengumuman-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden">
+    <!-- Overlay Gelap (Backdrop) -->
+    <div class="absolute inset-0 bg-slate-900/70 backdrop-blur-sm transition-opacity"></div>
+    
+    <!-- Kotak Modal (Ukurannya dikecilin jadi max-w-lg dan max-h-[90vh]) -->
+    <div class="relative bg-slate-800 border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto custom-scroll rounded-2xl sm:rounded-3xl p-5 sm:p-6 m-4 shadow-2xl anim-modal flex flex-col">
+      
+      <!-- Tombol X Close (Dipaku di pojok kanan) -->
+      <button onclick="tutupPengumuman()" class="absolute top-4 right-4 sm:top-5 sm:right-5 w-8 h-8 rounded-full border border-amber-500/50 bg-slate-800/80 text-slate-400 hover:text-amber-400 hover:border-amber-400 flex items-center justify-center transition-colors z-50 backdrop-blur-md">
+        <i data-lucide="x" class="size-4"></i>
+      </button>
+
+      <!-- Label Pengumuman Resmi (Dipaku di pojok kiri) -->
+      <div class="absolute top-4 left-4 sm:top-5 sm:left-5 px-3 py-1.5 rounded-full border border-amber-500/50 bg-slate-800/90 text-amber-400 text-[10px] font-bold tracking-wider flex items-center gap-2 z-50 backdrop-blur-md shadow-sm">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+        PENGUMUMAN RESMI
+      </div>
+
+      <!-- Gambar Poster (Tingginya dikunci biar jadi banner) -->
+      <img src="Biskita-Trans-Wibawa-Mukti-2.jpg" alt="Poster Pengumuman Biskita" class="w-full h-40 sm:h-52 object-cover rounded-xl border border-slate-600 shadow-md mt-10 mb-4 sm:mb-5 relative z-10">
+
+      <!-- Konten Teks yang lebih padat -->
+      <div class="text-center sm:text-left relative z-10 w-full px-1">
+        <h2 class="text-xl sm:text-2xl font-black text-white mb-1">Biskita Trans Wibawa Mukti</h2>
+        <h2 class="text-base sm:text-lg font-bold text-amber-400 mb-3 italic">Segera Berbayar!</h2>
+        
+        <p class="text-xs sm:text-sm text-slate-300 mb-5 leading-relaxed">
+          Nikmati layanan transportasi umum yang aman, nyaman, dan cepat di kawasan Kabupaten Bekasi. 
+          <br><br>
+          <strong class="text-emerald-400 text-sm sm:text-base tracking-wide">TARIF Rp. 4.300</strong>
+          <br>
+          Pastikan Anda tetap melakukan <em>Tap-In</em> dan <em>Tap-Out</em> menggunakan Kartu Uang Elektronik (E-Money/Flazz/Brizzi).
+        </p>
+
+        <!-- Tombol Mengerti (Pojok Kanan Bawah) -->
+        <div class="w-full flex justify-end pt-2 border-t border-slate-700/50">
+          <button onclick="tutupPengumuman()" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-2 sm:py-2.5 px-6 sm:px-8 rounded-xl transition-all hover:scale-105 shadow-md shadow-amber-500/20 text-sm">
+            Mengerti
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- ================= END MODAL ================= -->
+
+
+  <!-- Header -->
+  <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex flex-col items-center justify-center anim-nav relative z-10">
     <div class="flex items-center gap-4 sm:gap-8 bg-white/60 backdrop-blur-xl border border-white/80 px-6 py-3 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
       
-      <!-- Logo dan Teks SMKN 2 Cikarang Barat -->
       <div class="flex items-center gap-2 sm:gap-3">
         <img src="logosmkn2cikbar.png" alt="Logo SMKN 2 Cikarang Barat" class="h-10 sm:h-14 w-auto object-contain">
         <span class="font-bold text-xs sm:text-sm text-slate-800 leading-tight">
@@ -54,10 +110,8 @@
         </span>
       </div>
       
-      <!-- Garis Pemisah -->
       <div class="w-px h-10 sm:h-12 bg-slate-300"></div>
       
-      <!-- Logo Biskita Trans Wibawa Mukti -->
       <div class="flex items-center gap-3">
         <img src="Colorful_Biskita_Logo.png" alt="Logo Biskita Trans Wibawa Mukti" class="h-10 sm:h-14 w-auto object-contain">
       </div>
@@ -65,26 +119,23 @@
     </div>
   </header>
 
-  <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-6 flex flex-col gap-10 flex-1">
+  <!-- Main Content -->
+  <main class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-6 flex flex-col gap-10 flex-1 relative z-10">
     
-    <!-- Hero Section -->
     <div class="text-center max-w-4xl mx-auto space-y-4 sm:space-y-6 anim-hero-text">
       <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight tracking-tight drop-shadow-sm">
         TRACKING BISKITA <br class="hidden sm:inline"> TRANS WIBAWA MUKTI
       </h1>
-      <!-- Slogan Bahasa Sunda -->
       <p class="text-slate-600 text-base sm:text-xl font-medium leading-relaxed max-w-2xl mx-auto italic">
         "Tumpak Biskita, Nyaman, Aman, tur Gancang Nepi ka Tujuan."
       </p>
     </div>
 
-    <!-- Grid 3 Fitur Utama Aplikasi Tracking -->
+    <!-- Grid Fitur -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 anim-hero-card items-stretch mt-4">
       
-      <!-- Kartu 1: Lacak Langsung -->
       <a href="lacak.html" class="bg-white/70 hover:bg-white transition-all backdrop-blur-xl border border-white hover:border-sky-300 rounded-[28px] p-6 sm:p-7 flex flex-col shadow-lg hover:shadow-xl relative overflow-hidden group h-full cursor-pointer hover:-translate-y-1 duration-300">
         <div class="absolute -right-12 -top-12 w-32 h-32 bg-sky-400/10 rounded-full blur-2xl pointer-events-none group-hover:bg-sky-400/20 transition-all"></div>
-        
         <div class="flex items-center gap-3 mb-3 relative z-10">
           <div class="p-3 bg-sky-100 rounded-xl"><i data-lucide="bus" class="text-sky-600 size-5 sm:size-6"></i></div>
           <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Lacak Live</h2>
@@ -92,9 +143,7 @@
         <p class="text-sm text-slate-600 mb-6 relative z-10 leading-relaxed">
           Pantau pergerakan Biskita secara real-time langsung dari layar smartphone atau komputer Anda.
         </p>
-        
         <div class="mt-auto relative rounded-xl overflow-hidden border border-sky-100 bg-sky-50/50 h-36 flex flex-col justify-center items-center shadow-inner z-10 group-hover:scale-[1.02] transition-transform duration-300 shrink-0">
-          <!-- Ilustrasi Mini Radar/Map -->
           <div class="relative w-16 h-16 rounded-full border border-sky-300 flex justify-center items-center bg-white shadow-sm">
             <div class="absolute w-full h-full rounded-full border border-sky-400/50 animate-ping"></div>
             <i data-lucide="navigation" class="text-sky-600 size-6"></i>
@@ -102,10 +151,8 @@
         </div>
       </a>
 
-      <!-- Kartu 2: Rute & Halte -->
       <a href="rute.html" class="bg-white/70 hover:bg-white transition-all backdrop-blur-xl border border-white hover:border-emerald-300 rounded-[28px] p-6 sm:p-7 flex flex-col shadow-lg hover:shadow-xl relative overflow-hidden group h-full cursor-pointer hover:-translate-y-1 duration-300">
         <div class="absolute -left-12 -bottom-12 w-32 h-32 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-400/20 transition-all"></div>
-        
         <div class="flex items-center gap-3 mb-3 relative z-10">
           <div class="p-3 bg-emerald-100 rounded-xl"><i data-lucide="map-pin" class="text-emerald-600 size-5 sm:size-6"></i></div>
           <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Rute & Halte</h2>
@@ -113,10 +160,8 @@
         <p class="text-sm text-slate-600 mb-6 relative z-10 leading-relaxed">
           Informasi lengkap mengenai jalur trayek Biskita dan daftar titik halte se-Kabupaten Bekasi.
         </p>
-        
         <div class="mt-auto relative z-10 shrink-0 flex items-end">
           <div class="w-full h-36 rounded-xl border border-emerald-100 bg-gradient-to-tr from-emerald-50 to-white flex flex-col justify-center items-center group-hover:scale-105 transition-transform duration-300 shadow-inner">
-            <!-- Ilustrasi Jalur Halte -->
             <div class="flex items-center gap-2">
               <div class="w-4 h-4 rounded-full bg-emerald-500 shadow-md shadow-emerald-200"></div>
               <div class="w-8 h-0.5 bg-emerald-300 border-dashed border-t-2"></div>
@@ -128,10 +173,8 @@
         </div>
       </a>
 
-      <!-- Kartu 3: Jadwal -->
       <a href="jadwal.html" class="bg-white/70 hover:bg-white transition-all backdrop-blur-xl border border-white hover:border-amber-300 rounded-[28px] p-6 sm:p-7 flex flex-col shadow-lg hover:shadow-xl relative overflow-hidden group h-full cursor-pointer hover:-translate-y-1 duration-300">
         <div class="absolute right-0 top-1/2 w-32 h-32 bg-amber-400/10 rounded-full blur-2xl pointer-events-none group-hover:bg-amber-400/20 transition-all"></div>
-        
         <div class="flex items-center gap-3 mb-3 relative z-10">
           <div class="p-3 bg-amber-100 rounded-xl"><i data-lucide="clock" class="text-amber-600 size-5 sm:size-6"></i></div>
           <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Jadwal</h2>
@@ -139,9 +182,7 @@
         <p class="text-sm text-slate-600 mb-6 relative z-10 leading-relaxed">
           Cek estimasi kedatangan bus Biskita di halte terdekat agar perjalanan Anda lebih terencana.
         </p>
-        
         <div class="mt-auto relative rounded-xl overflow-hidden border border-amber-100 bg-amber-50/50 h-36 flex flex-col p-4 shadow-inner z-10 group-hover:scale-[1.02] transition-transform duration-300 shrink-0 gap-3 justify-center">
-          <!-- Ilustrasi Jadwal Digital -->
           <div class="flex justify-between items-center text-sm border-b border-amber-200/50 pb-2">
             <span class="text-slate-700 font-medium">Halte Pemda</span>
             <span class="text-amber-600 font-mono font-bold">08:15 WIB</span>
@@ -161,8 +202,8 @@
 
   </main>
 
-  <footer class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-500 gap-3 anim-nav">
-    <p class="text-center sm:text-left">&copy; 2026 Divisi ICT SMKN 2 Cikarang Barat. All rights reserved.</p>
+  <footer class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-slate-500 gap-3 anim-nav relative z-10">
+    <p class="text-center sm:text-left"> 2026 SMKN 2 Cikarang Barat. All rights reserved.</p>
     <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6 font-medium">
       <a href="lacak.html" class="hover:text-sky-600 transition-colors">Lacak Live</a>
       <a href="rute.html" class="hover:text-sky-600 transition-colors">Rute & Halte</a>
@@ -172,6 +213,20 @@
 
 <script>
   lucide.createIcons();
+
+  // ====== LOGIKA POPUP PENGUMUMAN ======
+  const modal = document.getElementById('pengumuman-modal');
+
+  if (!sessionStorage.getItem('pengumumanDilihat')) {
+    setTimeout(() => {
+      modal.classList.remove('hidden');
+    }, 1000); 
+  }
+
+  function tutupPengumuman() {
+    modal.classList.add('hidden');
+    sessionStorage.setItem('pengumumanDilihat', 'true');
+  }
 </script>
 </body>
 </html>
